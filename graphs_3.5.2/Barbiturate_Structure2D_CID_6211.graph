@@ -1,0 +1,33 @@
+#nodes;13
+#edges;13
+Nodes labelled;True
+Edges labelled;True
+Directed graph;False
+
+1;O;
+2;O;
+3;O;
+4;N;
+5;N;
+6;C;
+7;C;
+8;C;
+9;C;
+10;H;
+11;H;
+12;H;
+13;H;
+
+1;7;2
+2;8;2
+3;9;2
+4;7;1
+4;9;1
+4;12;1
+5;8;1
+5;9;1
+5;13;1
+6;7;1
+6;8;1
+6;10;1
+6;11;1
