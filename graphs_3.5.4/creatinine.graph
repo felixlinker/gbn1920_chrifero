@@ -1,0 +1,38 @@
+#nodes;15
+#edges;15
+Nodes labelled;True
+Edges labelled;True
+Directed graph;False
+
+1;O;
+2;N;
+3;N;
+4;N;
+5;C;
+6;C;
+7;C;
+8;C;
+9;H;
+10;H;
+11;H;
+12;H;
+13;H;
+14;H;
+15;H;
+
+1;7;2
+2;5;1
+2;6;1
+2;8;1
+3;6;2
+3;7;1
+4;6;1
+4;14;1
+4;15;1
+5;7;1
+5;9;1
+5;10;1
+8;11;1
+8;12;1
+8;13;1
+Finished.
