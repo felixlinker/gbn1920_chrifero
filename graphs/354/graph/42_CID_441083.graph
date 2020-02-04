@@ -4,28 +4,28 @@ Nodes labelled;True
 Edges labelled;True
 Directed graph;False
 
-1;O;
-2;O;
-3;N;
-4;N;
-5;N;
-6;N;
-7;C;
-8;C;
-9;C;
-10;C;
-11;C;
-12;C;
-13;H;
-14;H;
-15;H;
-16;H;
-17;H;
-18;H;
-19;H;
-20;H;
-21;H;
-22;H;
+1;O
+2;O
+3;N
+4;N
+5;N
+6;N
+7;C
+8;C
+9;C
+10;C
+11;C
+12;C
+13;H
+14;H
+15;H
+16;H
+17;H
+18;H
+19;H
+20;H
+21;H
+22;H
 
 1;11;2
 2;12;2
