@@ -8,6 +8,7 @@ pylint = "*"
 
 [packages]
 multivitamin = {editable = true,path = "./../multivitamin"}
+migraine = {editable = true,path = "./../MIGRAINE"}
 
 [requires]
 python_version = "3.7"

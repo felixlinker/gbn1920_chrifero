@@ -8,6 +8,10 @@ libraries = {
         'stmt': 'from bm_multivitamin import run; run()',
         'setup': 'from bm_multivitamin import setup; setup(inputs[:slice_to])',
     },
+    'migraine': {
+        'stmt': 'from bm_migraine import run; run()',
+        'setup': 'from bm_migraine import setup; setup(inputs[:slice_to])',
+    },
 }
 
 parser = argparse.ArgumentParser()
