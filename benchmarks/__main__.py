@@ -13,7 +13,7 @@ libraries = {
 parser = argparse.ArgumentParser()
 parser.add_argument('--inputs', '-i', nargs='+')
 parser.add_argument('--library', '-l', choices=libraries.keys())
-parser.add_argument('--number', '-n', type=int, default=20)
+parser.add_argument('--number', '-n', type=int, default=5)
 parser.add_argument('--asc', '-a', action='store_true')
 args = parser.parse_args()
 
