@@ -8,7 +8,7 @@ def setup(inputs):
     aligner = Multalign(
         # input_files is a magical global constant set by benchmark.py
         graph_list=list(map(parse_graph, inputs)),
-        algorithm='subVF2',
+        algorithm='SUBVF2',
         method='GREEDY',
         save_all=False
     )
