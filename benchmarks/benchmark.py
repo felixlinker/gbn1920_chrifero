@@ -12,7 +12,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--inputs', '-i', nargs='+')
     parser.add_argument('--library', '-l', choices=libraries.keys())
+    parser.add_argument('--number', '-n', type=int, default=20)
     args = parser.parse_args()
 
-    duration = timeit.timeit(globals=globals(), **libraries[args.library])
+    duration = timeit.timeit(globals=globals(), **
+                             libraries[args.library], number=args.number)
     print(duration)
