@@ -1,0 +1,28 @@
+Pseudocode Scoringfunktion:
+
+Input: graph1, graph2 
+#Reduziere Groesse des Graphen fuer Suche nach Zyklen
+while(Knoten mit deg(v)=1):
+	waehle Knoten v mit Grad 1
+	entferne Knoten v aus Suchraum
+
+#Suche Zyklische Struktur der Laenge 5 oder 6 (aromatische Ringe):
+for (Knoten in graph1):
+	erzeuge Pfad p der Laenge 5 (6)
+	if ende(p) = anfang(p):
+		Speichere gefundenen Zyklus
+		Entferne Knoten in p aus Suchraum
+	else:
+		entferne Pfad aus lokalem Suchraum
+
+for (Knoten in graph1 mit deg(v) > 1 ODER Doppelbindung):
+	if Knotenlabel = 'C' and deg(v) = 4 and 3 Nachbarknoten mit Label 'H':
+		Speichere Knoten in Gruppe 'Methylgruppe'
+	if Knotenlabel = 'N' and deg(v) = 3 und 2 Nachbarknoten mit Label 'H':
+		Speichere Knoten in Gruppe 'Aminogruppe'
+
+(etc.)
+
+wiederhole fuer Graph2
+
+Vergleiche gefundene Gruppen fuer Graph1, Graph2 nach zu bestimmendem Scoringsystem
