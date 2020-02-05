@@ -1,29 +1,25 @@
 import os
 from .matrix import *
 from multivitamin.utils.multalign import Multalign
+from multivitamin.utils.parser import parse_graph
 
 
 
 class Symmetric:
     def __init__(self, graph_list):
-        count = 1
         graphs = []
-        with os.scandir('./../graphs/352/graph') as entries:
+        with os.scandir('./../../graphs/352/graph') as entries:
             for entry in entries:
                 print(entry.name)
-                g = "g" + str(count)
-                # g1 = parse("./../graphs/352/graph/"+entry.name)
-                graphs.append(g)
-                count += 1
-        print(graphs)
+                graphs.append(parse_graph("./../graphs/352/graph/"+entry.name))
+        # print(graphs)
         self.graph_list = graphs
-        pass
 
     def calc_scoring(self):
         score = ScoringMatrix()
         g = self.graph_list()
         for g1 in range(0, len(g)):
-            for g2 in range(1, len(g)):
+            for g2 in range(g1+1, len(g)):
                 alignment = Multalign(
                     # input_files is a magical global constant set by benchmark.py
                     graph_list=(g[g1], g[g2]),
@@ -31,10 +27,10 @@ class Symmetric:
                     method='GREEDY',
                     save_all=False
                 )
-                alignment.multalign()
-                # s = alignment.countmatches()
+                al_graph = alignment.multalign()
+                print(len(al_graph.nodes))
+                # s = len(al_graph.nodes)
                 # score.set_scoring('g'+str(g1), 'g'+str(g2), s)
-        pass
 
     def get_scoring(self):
         pass
