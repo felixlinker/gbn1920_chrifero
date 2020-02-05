@@ -1,5 +1,4 @@
 import os
-from benchmarks import bm_multivitamin
 from .matrix import *
 from multivitamin.utils.multalign import Multalign
 
