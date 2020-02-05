@@ -3,7 +3,7 @@ from glob import glob
 from itertools import chain
 from multivitamin.utils.parser import parse_graph
 
-from .scoring import Symmetric
+from trier.scoring import Symmetric
 
 scorers = {
     'symmetric': Symmetric,
