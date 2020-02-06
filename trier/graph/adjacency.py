@@ -21,8 +21,7 @@ class AdjacencyGraph:
         shape = (len(nodes), len(nodes))
         self.adj_matrix = numpy.zeros(shape)
         self.edge_labels = numpy.full(shape, '')
-        self.node_labels = numpy.array(
-            list(map(lambda n: n.get_label()[0], nodes)))
+        self.node_labels = list(map(lambda n: n.get_label(), nodes))
 
         node_indices = dict(zip(nodes, range(0, len(nodes))))
         for edge in edges:
