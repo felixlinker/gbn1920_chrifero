@@ -3,10 +3,11 @@ from multivitamin.basic.node import Node
 
 
 class AdjacencyGraph:
-    def __init__(self, graph=None, matrix=None, edge_labels=None, node_labels=None):
+    def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
         if graph:
             self.__from_multivitamin(graph)
         elif matrix and edge_labels and node_labels:
+            self.id = gid
             self.adj_matrix = matrix
             self.edge_labels = edge_labels
             self.node_labels = node_labels
@@ -16,6 +17,7 @@ class AdjacencyGraph:
     def __from_multivitamin(self, graph):
         # Nodes and edges actually are sets; convert them to list here such that
         # the order of iteration is fixed
+        self.id = graph.id
         nodes = list(graph.nodes)
         edges = list(graph.edges)
         shape = (len(nodes), len(nodes))
