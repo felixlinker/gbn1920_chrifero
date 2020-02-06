@@ -5,13 +5,12 @@ from multivitamin.utils.parser import parse_graph
 
 from trier.scoring import Symmetric
 
-scorers = {
-    'symmetric': Symmetric,
-}
+scorers = dict(map(lambda c: (c.__name__, c), [Symmetric]))
 
 parser = ArgumentParser()
-parser.add_argument('--inputs', '-i', type=str, nargs='+')
-parser.add_argument('--scorer', '-s', choices=scorers.keys())
+parser.add_argument('--inputs', '-i', type=str, nargs='+', required=True)
+parser.add_argument('--scorer', '-s', choices=scorers.keys(),
+                    default=Symmetric.__name__)
 args = parser.parse_args()
 
 inputs = chain.from_iterable(map(glob, args.inputs))
