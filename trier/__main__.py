@@ -10,7 +10,7 @@ scorers = {
 }
 
 parser = ArgumentParser()
-parser.add_argument('--inputs', '-i', type=list, nargs='+')
+parser.add_argument('--inputs', '-i', type=str, nargs='+')
 parser.add_argument('--scorer', '-s', choices=scorers.keys())
 args = parser.parse_args()
 
