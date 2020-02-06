@@ -1,36 +1,26 @@
-import os
 from .matrix import *
-from multivitamin.utils.multalign import Multalign
-from multivitamin.utils.parser import parse_graph
+from multivitamin.algorithms.vf2_subsub import subVF2
 
 
 
 class Symmetric:
     def __init__(self, graph_list):
-        graphs = []
-        with os.scandir('./../../graphs/352/graph') as entries:
-            for entry in entries:
-                print(entry.name)
-                graphs.append(parse_graph("./../graphs/352/graph/"+entry.name))
-        # print(graphs)
-        self.graph_list = graphs
+        self.graph_list = graph_list
 
     def calc_scoring(self):
         score = ScoringMatrix()
-        g = self.graph_list()
+        g = self.graph_list
         for g1 in range(0, len(g)):
             for g2 in range(g1+1, len(g)):
-                alignment = Multalign(
-                    # input_files is a magical global constant set by benchmark.py
-                    graph_list=(g[g1], g[g2]),
-                    algorithm='SUBVF2',
-                    method='GREEDY',
-                    save_all=False
-                )
-                al_graph = alignment.multalign()
-                print(len(al_graph.nodes))
-                # s = len(al_graph.nodes)
-                # score.set_scoring('g'+str(g1), 'g'+str(g2), s)
+                alignment = subVF2(g[g1], g[g2])
+                alignment.match()
+                al_graph = alignment.result_graphs[0]
+                countmatches = 0
+                for node in al_graph.nodes:
+                    # print('id: ', node.id, ' label: ', node.label)
+                    if len(node.label) > 1:
+                        countmatches += 1
+                score.set_scoring('g'+str(g1), 'g'+str(g2), countmatches)
 
     def get_scoring(self):
         pass
