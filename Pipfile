@@ -12,6 +12,7 @@ rope = "*"
 multivitamin = {editable = true,path = "./../multivitamin"}
 migraine = {editable = true,path = "./../MIGRAINE"}
 numpy = "*"
+biopython = "*"
 
 [requires]
 python_version = "3.7"
