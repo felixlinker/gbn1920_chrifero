@@ -32,10 +32,12 @@ class AdjacencyGraph:
             self.adj_matrix[i1][i2] = 1
             self.edge_labels[i1][i2] = edge.label
 
-        # Make matrices symmetric
-        self.adj_matrix = self.adj_matrix + self.adj_matrix.transpose()
-        self.edge_labels = numpy.core.defchararray.add(
-            self.edge_labels, self.edge_labels.transpose())
+        # Make matrices symmetric; they might already be symmetric so check if
+        # a value is present before taking it from the transposed matrix
+        for i, v in numpy.ndenumerate(self.adj_matrix):
+            self.adj_matrix[i] = v or self.adj_matrix.T[i]
+        for i, v in numpy.ndenumerate(self.edge_labels):
+            self.edge_labels[i] = v or self.edge_labels.T[i]
 
     def decompose(self):
         pass
