@@ -66,6 +66,7 @@ class AdjacencyGraph:
         self.id = graph.id
         nodes = list(graph.nodes)
         edges = list(graph.edges)
+
         shape = (len(nodes), len(nodes))
         self.adj_matrix = numpy.zeros(shape)
         self.edge_labels = numpy.full(shape, '')
@@ -89,7 +90,7 @@ class AdjacencyGraph:
         dec_matrix = self.adj_matrix
         self.cut_tails()
         self.split_cycles()
-        self.leftover_graph = SubGraph(parent=self, adjacency_matrix=self.adj_matrix, label =None)
+        self.leftover_graph = SubGraph(parent=self, adj_matrix=self.adj_matrix, label =None)
         self.adj_matrix = dec_matrix
         return self.sub_graphs
 
@@ -117,7 +118,7 @@ class AdjacencyGraph:
                     #node_index_dict = self.update_node_dict(node_index_dict, node_index=i)
                     break
             is_trimmed = self.has_not_deg_one(self.adj_matrix)
-        self.sub_graphs.append(SubGraph(parent=self, adjacency_matrix=del_adj_matrix, label=None))
+        self.sub_graphs.append(SubGraph(parent=self, adj_matrix=del_adj_matrix, label=None))
         return self.sub_graphs
 
     def get_tails(self):
@@ -199,7 +200,7 @@ class AdjacencyGraph:
             self.adj_matrix[path[0]][path[len(path)-1]] =0
             self.adj_matrix[path[len(path)-1]][path[0]] =0
             
-            self.sub_graphs.append(SubGraph(parent=self,adjacency_matrix=sub_matrix, label=None))
+            self.sub_graphs.append(SubGraph(parent=self,adj_matrix=sub_matrix, label=None))
 
         return self.sub_graphs
     
