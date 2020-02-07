@@ -20,6 +20,6 @@ class GuidedAligning:
         pairs = (re.findall(r"\([^,()]+\,[^,()]+\)", newick))
 
         # interpret newickformat as alignment-guide
-        for g in self.graph_list:
-            if g
+        # for g in self.graph_list:
+        #     if g
         pass
