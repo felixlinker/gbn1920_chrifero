@@ -203,7 +203,9 @@ class AdjacencyGraph:
             self.sub_graphs.append(SubGraph(parent=self,adj_matrix=sub_matrix, label=None))
 
         return self.sub_graphs
-    
+
+    def get_cycles(self):
+        return filter(lambda sg: sg.label == SubGraphLabel.CYCLE, self.sub_graphs)
 
     def has_not_deg_one(self, matrix):
         for i in range(0, len(matrix[0])):
