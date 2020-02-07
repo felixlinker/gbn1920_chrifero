@@ -4,10 +4,10 @@ from itertools import chain
 from multivitamin.utils.parser import parse_graph
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 
-from trier.scoring import Symmetric
+from trier.scoring import Symmetric, ComponentScorer
 from trier.aligning import GuidedAligning
 
-scorers = dict(map(lambda c: (c.__name__, c), [Symmetric]))
+scorers = dict(map(lambda c: (c.__name__, c), [Symmetric, ComponentScorer]))
 
 parser = ArgumentParser()
 parser.add_argument('--inputs', '-i', type=str, nargs='+', required=True)
