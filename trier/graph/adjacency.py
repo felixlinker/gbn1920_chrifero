@@ -11,18 +11,18 @@ __map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
 
 
 def __split_reachability(sub_graph, parent):
-    reachability_matrix = dijkstra(sub_graph.adjacency_matrix, directed=False)
-    indexes = numpy.array(range(sub_graph.adjacency_matrix.shape[0]))
+    reachability_matrix = dijkstra(sub_graph.adj_matrix, directed=False)
+    indexes = numpy.array(range(sub_graph.adj_matrix.shape[0]))
     reachables = map(lambda r: indexes * r,
                      __map_is_reachable(reachability_matrix))
     for i, reachables in enumerate(reachables):
         # Only consider every set of reachables once
         if reachables[0] <= i:
             continue
-        new_matrix = numpy.zeros(sub_graph.adjacency_matrix.shape)
+        new_matrix = numpy.zeros(sub_graph.adj_matrix.shape)
         for row in reachables:
             for col in reachables:
-                new_matrix[row,col] = sub_graph.adjacency_matrix[row,col]
+                new_matrix[row, col] = sub_graph.adj_matrix[row, col]
                 yield SubGraph(parent, label=sub_graph.label)
 
 
@@ -32,12 +32,12 @@ class SubGraphLabel(Enum):
 
 
 class SubGraph:
-    def __init__(self, parent, adjacency_matrix=None, label=None):
+    def __init__(self, parent, adj_matrix=None, label=None):
         self.parent = parent
-        if adjacency_matrix and adjacency_matrix.shape != parent.adjacency_matrix.shape:
+        if adj_matrix and adj_matrix.shape != parent.adj_matrix.shape:
             raise ValueError("adjacency matrices must agree on shape")
-        self.adjacency_matrix = adjacency_matrix if adjacency_matrix else numpy.zeros(
-            parent.adjacency_matrix.shape)
+        self.adj_matrix = adj_matrix if adj_matrix else numpy.zeros(
+            parent.adj_matrix.shape)
         self.label = label
 
 
