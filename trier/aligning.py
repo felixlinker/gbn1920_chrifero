@@ -2,14 +2,6 @@ from Bio import Phylo
 from io import StringIO
 import re
 
-def calc(tree):
-    root = tree.root
-    return rec(root.sibling_left, root.sibling_right)
-
-def rec(s1, s2):
-    if 
-
-
 class GuidedAligning:
     def __init__(self, graph_list, guide_tree):
         self.graph_list = graph_list
