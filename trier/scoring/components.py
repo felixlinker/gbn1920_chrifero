@@ -5,11 +5,11 @@ from ..graph.adjacency import AdjacencyGraph
 from ..util.func import uncurry
 
 
-def __asc_commons(l1, l2):
+def _asc_commons(l1, l2):
     """Returns a list of all elements that are in two lists. Lists must be
     sorted in ascending order. Return value will be sorted in descending order.
 
-    For example: __asc_commons([1,2,3,4], [0,2,4]) -> [4,2]"""
+    For example: _asc_commons([1,2,3,4], [0,2,4]) -> [4,2]"""
     if l1 and l2:
         h1, h1_ = 0, 0
         h2, h2_ = 0, 0
@@ -28,7 +28,7 @@ def __asc_commons(l1, l2):
                 yield h1
 
 
-def __adj_component_signatures_distance(adj_graph1, adj_graph2):
+def _adj_component_signatures_distance(adj_graph1, adj_graph2):
     """Compares two adjacency graphs based on their """
     k1 = list(map(len, adj_graph1.get_cycles()))
     k2 = list(map(len, adj_graph2.get_cycles()))
@@ -57,7 +57,7 @@ class ComponentScorer:
         for i in range(len(adj_graphs)):
             compare1 = adj_graphs[i]
             for compare2 in adj_graphs[i + 1:]:
-                score = __adj_component_signatures_distance(compare1, compare2)
+                score = _adj_component_signatures_distance(compare1, compare2)
                 self.matrix[compare1.id, compare2.id] = reduce(float.__add__, map(
                     uncurry(float.__mul__), zip(self.cycle_tail_weight, score)))
 
