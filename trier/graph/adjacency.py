@@ -34,9 +34,9 @@ class SubGraphLabel(Enum):
 class SubGraph:
     def __init__(self, parent, adj_matrix=None, label=None):
         self.parent = parent
-        if adj_matrix and adj_matrix.shape != parent.adj_matrix.shape:
+        if adj_matrix is not None and adj_matrix.shape != parent.adj_matrix.shape:
             raise ValueError("adjacency matrices must agree on shape")
-        self.adj_matrix = adj_matrix if adj_matrix else numpy.zeros(
+        self.adj_matrix = adj_matrix if adj_matrix is not None else numpy.zeros(
             parent.adj_matrix.shape)
         self.label = label
 
