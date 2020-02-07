@@ -49,6 +49,7 @@ class SubGraph:
 class AdjacencyGraph:
     def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
         self.sub_graphs = []
+        self.leftover_graph = None
         if graph:
             self.__from_multivitamin(graph)
         elif matrix and edge_labels and node_labels:
@@ -85,8 +86,11 @@ class AdjacencyGraph:
             self.edge_labels[i] = v or self.edge_labels.T[i]
 
     def decompose(self):
+        dec_matrix = self.adj_matrix
         self.cut_tails()
         self.split_cycles()
+        self.leftover_graph = SubGraph(parent=self, adjacency_matrix=self.adj_matrix, label =None)
+        self.adj_matrix = dec_matrix
         return self.sub_graphs
 
     def cut_tails(self):
@@ -96,14 +100,13 @@ class AdjacencyGraph:
         dec_matrix = self.adj_matrix
         del_adj_matrix = numpy.zeros_like(self.adj_matrix)
         is_trimmed = self.has_not_deg_one(dec_matrix)
-
-        node_index_dict = {}
+        
         '''
         for i in range(0, len(self.adj_matrix)):
             node_index_dict[i] = i
         '''
         while is_trimmed is not True:
-            for i in range(0, len(dec_matrix[0])):
+            for i in range(0, len(self.adj_matrix[0])):
                 if numpy.sum(self.adj_matrix[i], axis=0) == 1:
                     adj_pos = numpy.where(self.adj_matrix[i] == 1)[0]
                     del_adj_matrix[adj_pos[0]][i] = 1
@@ -114,10 +117,28 @@ class AdjacencyGraph:
                     #node_index_dict = self.update_node_dict(node_index_dict, node_index=i)
                     break
             is_trimmed = self.has_not_deg_one(self.adj_matrix)
+        self.sub_graphs.append(SubGraph(parent=self, adjacency_matrix=del_adj_matrix, label=None))
         return self.sub_graphs
 
     def get_tails(self):
         return filter(lambda sg: sg.label == SubGraphLabel.TAIL, self.sub_graphs)
+
+    '''
+    def tails_to_subgraph(self, del_adj_matrix):
+        
+        for n in range(0, len(del_adj_matrix[0])):
+            if numpy.sum(del_adj_matrix[n], axis=0) ==1:
+                path = []
+                path.append(n)
+                adj_pos = numpy.where(del_adj_matrix[n] == 1)[0]
+                end_of_path = False
+                while end_of_path is not True:
+                    if numpy.sum(del_adj_matrix[adj_pos[0]], axis=0) >=2:
+                        path.append(adj_pos[0])
+                        adj_pos = numpy.where(del_adj_matrix[adj_pos[0]] == 1)[0]
+                    else: 
+                        end_of_path = True\
+    '''
 
     def __split_connected_subgraphs(self):
         # Split every subgraph into a set of strongly connected components
@@ -128,99 +149,60 @@ class AdjacencyGraph:
     def split_cycles(self):
         '''
         Finding cyclic paths:
-        NOTE1: Unnoetig, wenn weniger als 5 Knoten.
 
-        NOTE2: Die nodes nach Grad zu sortieren waere eine sinnvolle Ergaenzung
-
-        NOTE3: Schlaueres Abbruchkriterium finden, auch wenn die tatsaechliche
-        Anzahl an Operationen geringer ist als die Schleifen vermuten lassen.\
-
-        NOTE4: Dictionary fuer urspruengliche node_indices.
+        NOTE2: Die nodes nach Grad zu sortieren waere eine sinnvolle Ergaenzung.
+        Oder auch nicht, gemessen daran dass ziemlich viele Knoten ohnehin wegfallen.
         '''
         # print(dec_matrix)
         cycles = []
-        assigned_nodes = []
-        class_dict = {}
-        dec_matrix = self.adj_matrix
 
-        if len(dec_matrix[0]) > 5:
-
-            for i in range(0, len(dec_matrix[0])):
+        for i in range(0, len(self.adj_matrix[0])):
+            if numpy.sum(self.adj_matrix[i], axis=0) >= 1:
                 path_length = 1
                 path_list = []
                 new_path = []
                 new_path.append(i)
                 path_list.append(new_path)
-                while path_length < 6:
+                while path_length <= 6:
                     path_index = len(path_list)-1
-
                     for p in range(0, len(path_list)):
                         path = path_list[p]
-                        neighbors = self.get_adjacent_nodes(
-                            dec_matrix, path[len(path)-1])
+                        neighbors = self.get_adjacent_nodes(self.adj_matrix, path[len(path)-1])
                         # print(neighbors)
 
                         for node in neighbors:
-                            if node not in path or path[0] == node:
+                            if node not in path:
                                 next_path = path
                                 next_path.append(node)
                                 path_list.append(next_path)
                                 # print(next_path)
-
-                                if path[0] == node:
-                                    cycle_nodes = self.lookup(
-                                        path, node_index_dict)
-
-                                    if self.is_new_cycle(cycle_nodes, cycles):
-                                        print("Cycle found: " +
-                                              str(cycle_nodes))
-                                        cycles.append(cycle_nodes)
-                                        '''
-                                        An sich sollte hier dann noch abgefragt werden ob der
-                                        Cycle lang genug ist, aber vielleicht, faellt uns ja noch
-                                        ein Nutzen fuer 4-Zyklen ein...
-                                        '''
-                                        assigned_nodes = assigned_nodes + cycle_nodes
-                                        for n in cycle_nodes:
-                                            class_dict[n] = 'cycle'
-
+                            elif path[0] == node:
+                                if self.is_new_cycle(path, cycles):
+                                    print("Cycle found: " +str(path))
+                                    cycles.append(path)
+                            else:
+                                pass
+    
                     path_list = path_list[path_index+1:]
                     path_length += 1
                     # print(path_length)
 
-        '''
-        Naechster Schritt waere, die in cycles enthaltenen Pfade zu markieren - die
-        uebrigen sind dann die fuer die restliche Klassifikation interessanten.
-        Dafuer brauchen wir wieder die urspruengliche Matrix.
+        for path in cycles:
+            sub_matrix = numpy.zeros_like(self.adj_matrix)
+            for n in range(0, len(path)-1):
+                sub_matrix[path[n]][path[n+1]] =1
+                sub_matrix[path[n+1]][path[n]] =1
+                self.adj_matrix[path[n]][path[n+1]] =0
+                self.adj_matrix[path[n+1]][path[n]] =0
+            sub_matrix[path[0]][path[len(path)-1]] =1
+            sub_matrix[path[len(path)-1]][path[0]] =1
+            self.adj_matrix[path[0]][path[len(path)-1]] =0
+            self.adj_matrix[path[len(path)-1]][path[0]] =0
+            
+            self.sub_graphs.append(SubGraph(parent=self,adjacency_matrix=sub_matrix, label=None))
 
-
-
-        for n in range(0, len(self.adj_matrix)):
-            if n not in assigned_nodes and self.node_labels[n][n] != 'H':
-                node_class, neighbors = self.classify_node(self.adj_matrix, node_index=n)
-                class_dict[n]= node_class
-                for v in neighbors:
-                    if v not in class_dict.keys():
-                        class_dict[v] = node_class
-                if node_class is not None:
-                    assigned_nodes = assigned_nodes+ neighbors
-        '''
         return self.sub_graphs
-
-    def get_cycles(self):
-        return filter(lambda sg: sg.label == SubGraphLabel.CYCLE, self.sub_graphs)
-
-    def lookup(self, path, node_dict):
-        cycle = []
-        for node in path:
-            cycle.append(node_dict.get(node))
-        return cycle
-
-    def update_node_dict(self, node_dict, node_index):
-        for key in node_dict:
-            if int(key) >= node_index and int(key)+1 < len(node_dict):
-                node_dict[key] = node_dict.get(int(key)+1)
-        return node_dict
+    
 
     def has_not_deg_one(self, matrix):
         for i in range(0, len(matrix[0])):
