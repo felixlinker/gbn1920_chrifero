@@ -91,6 +91,9 @@ class AdjacencyGraph:
             is_trimmed = self.has_not_deg_one(self.adj_matrix)
         return self.sub_graphs
 
+    def __split_connected_subgraphs(self):
+        pass
+
     def split_cycles(self):
         '''
         Finding cyclic paths:
