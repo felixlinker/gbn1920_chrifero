@@ -28,6 +28,12 @@ def _asc_commons(l1, l2):
                 yield h1
 
 
+def _len_cmp(l1, l2):
+    if not len(l2):
+        return 1
+    return len(l1) / len(l2)
+
+
 def _adj_component_signatures_distance(adj_graph1, adj_graph2):
     """Compares two adjacency graphs based on their """
     k1 = list(map(len, adj_graph1.get_cycles()))
@@ -36,8 +42,8 @@ def _adj_component_signatures_distance(adj_graph1, adj_graph2):
     t1 = list(map(len, adj_graph1.get_tails()))
     t2 = list(map(len, adj_graph2.get_tails()))
     t_common = list(_asc_commons(t1, t2))
-    return (0.5 * (len(k_common) / len(k1) + len(k_common) / len(k2)),    # average number of common cycles
-            0.5 * (t_common / len(t1) + t_common / len(t2)))    # average number of common tails
+    return (0.5 * (_len_cmp(k_common, k1) + _len_cmp(k_common, k2)),    # average number of common cycles
+            0.5 * (_len_cmp(t_common, t1) + _len_cmp(t_common, t2)))    # average number of common tails
 
 
 class ComponentScorer:
