@@ -4,6 +4,26 @@ from multivitamin.basic.edge import Edge
 from multivitamin.basic.graph import Graph
 from itertools import chain
 from enum import Enum
+from scipy.sparse.csgraph import dijkstra
+
+
+__map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
+
+
+def __split_reachability(sub_graph, parent):
+    reachability_matrix = dijkstra(sub_graph.adjacency_matrix, directed=False)
+    indexes = numpy.array(range(sub_graph.adjacency_matrix.shape[0]))
+    reachables = map(lambda r: indexes * r,
+                     __map_is_reachable(reachability_matrix))
+    for i, reachables in enumerate(reachables):
+        # Only consider every set of reachables once
+        if reachables[0] <= i:
+            continue
+        new_matrix = numpy.zeros(sub_graph.adjacency_matrix.shape)
+        for row in reachables:
+            for col in reachables:
+                new_matrix[row,col] = sub_graph.adjacency_matrix[row,col]
+                yield SubGraph(parent, label=sub_graph.label)
 
 
 class SubGraphLabel(Enum):
@@ -92,7 +112,10 @@ class AdjacencyGraph:
         return self.sub_graphs
 
     def __split_connected_subgraphs(self):
-        pass
+        # Split every subgraph into a set of strongly connected components
+        splitted = [__split_reachability(sg, self) for sg in self.sub_graphs]
+        # Merge the list of connected components
+        self.sub_graphs = list(chain.from_iterable(splitted))
 
     def split_cycles(self):
         '''
