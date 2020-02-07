@@ -40,6 +40,11 @@ class SubGraph:
             parent.adj_matrix.shape)
         self.label = label
 
+    def __len__(self):
+        """Returns the number of all nodes in the subgraph."""
+        # Get the number of rows that are connected to at least one node
+        return len(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix)))
+
 
 class AdjacencyGraph:
     def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
@@ -304,3 +309,7 @@ class AdjacencyGraph:
                      edges=set(chain.from_iterable(node_2_edges.values())),
                      nodes_labelled=True, edges_labelled=True,
                      is_directed=False)
+
+    def __len__(self):
+        """Returns the number of nodes in the graph."""
+        return self.adj_matrix.shape[0]
