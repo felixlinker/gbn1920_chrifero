@@ -111,6 +111,9 @@ class AdjacencyGraph:
             is_trimmed = self.has_not_deg_one(self.adj_matrix)
         return self.sub_graphs
 
+    def get_tails(self):
+        return filter(lambda sg: sg.label == SubGraphLabel.TAIL, self.sub_graphs)
+
     def __split_connected_subgraphs(self):
         # Split every subgraph into a set of strongly connected components
         splitted = [__split_reachability(sg, self) for sg in self.sub_graphs]
@@ -198,6 +201,9 @@ class AdjacencyGraph:
                     assigned_nodes = assigned_nodes+ neighbors
         '''
         return self.sub_graphs
+
+    def get_cycles(self):
+        return filter(lambda sg: sg.label == SubGraphLabel.CYCLE, self.sub_graphs)
 
     def lookup(self, path, node_dict):
         cycle = []
