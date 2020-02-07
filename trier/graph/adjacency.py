@@ -43,7 +43,7 @@ class SubGraph:
     def __len__(self):
         """Returns the number of all nodes in the subgraph."""
         # Get the number of rows that are connected to at least one node
-        return len(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix)))
+        return len(list(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix))))
 
 
 class AdjacencyGraph:

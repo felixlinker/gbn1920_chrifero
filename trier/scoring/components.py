@@ -30,13 +30,13 @@ def __asc_commons(l1, l2):
 
 def __adj_component_signatures_distance(adj_graph1, adj_graph2):
     """Compares two adjacency graphs based on their """
-    k1 = map(len, adj_graph1.get_cycles())
-    k2 = map(len, adj_graph2.get_cycles())
-    k_common = __asc_commons(k1, k2)
-    t1 = map(len, adj_graph1.get_tails())
-    t2 = map(len, adj_graph2.get_tails())
-    t_common = __asc_commons(t1, t2)
-    return (0.5 * (k_common / len(k1) + k_common / len(k2)),    # average number of common cycles
+    k1 = list(map(len, adj_graph1.get_cycles()))
+    k2 = list(map(len, adj_graph2.get_cycles()))
+    k_common = list(_asc_commons(k1, k2))
+    t1 = list(map(len, adj_graph1.get_tails()))
+    t2 = list(map(len, adj_graph2.get_tails()))
+    t_common = list(_asc_commons(t1, t2))
+    return (0.5 * (len(k_common) / len(k1) + len(k_common) / len(k2)),    # average number of common cycles
             0.5 * (t_common / len(t1) + t_common / len(t2)))    # average number of common tails
 
 
