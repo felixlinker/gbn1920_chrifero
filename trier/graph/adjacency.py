@@ -89,6 +89,7 @@ class AdjacencyGraph:
     def decompose(self):
         dec_matrix = self.adj_matrix
         self.cut_tails()
+        self._split_connected_subgraphs()
         self.split_cycles()
         self.leftover_graph = SubGraph(parent=self, adj_matrix=self.adj_matrix, label =None)
         self.adj_matrix = dec_matrix
