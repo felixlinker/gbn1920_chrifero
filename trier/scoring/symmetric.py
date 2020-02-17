@@ -7,11 +7,11 @@ class Symmetric:
         self.graph_list = graph_list
         self.matrix = DistanceMatrix(list(map(lambda g: g.id, graph_list)))
 
-    def calc_scoring(self):
+    def calc_scoring(self, scoring_matrix=None):
         g = self.graph_list
         for g1 in range(0, len(g)):
             for g2 in range(g1+1, len(g)):
-                alignment = subVF2(g[g1], g[g2])
+                alignment = subVF2(g[g1], g[g2], scoring_matrix=scoring_matrix)
                 alignment.match()
                 al_graph = alignment.result_graphs[0]
                 countmatches = 0
