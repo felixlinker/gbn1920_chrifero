@@ -63,8 +63,8 @@ class SubGraph:
                 self.atom_dict[ch] = labels.count(ch)
         return self.atom_dict
 
-        
-    def __toString__(self):
+
+    def __str__(self):
         if self.label == SubGraphLabel.CYCLE:
             ch_str = "R"
         else:
