@@ -46,7 +46,7 @@ class SubGraph:
         # Get the number of rows that are connected to at least one node
         return len(list(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix))))
      
-    def set_chem_label(self):
+    def get_chem_label(self):
         '''Returns a classifier for structural type as str'''
         self.atom_dict = {}
         
