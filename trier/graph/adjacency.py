@@ -198,11 +198,6 @@ class AdjacencyGraph:
                 return False
         return True
 
-    def remove_node(self, dec_matrix, node_index):
-        matr_del = numpy.delete(dec_matrix, obj=node_index, axis=0)
-        matr_del = numpy.delete(matr_del, obj=node_index, axis=1)
-        return matr_del
-
     def get_adjacent_nodes(self, matrix, node_index):
         return numpy.where(matrix[node_index] == 1)[0]
 
