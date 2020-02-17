@@ -1,11 +1,11 @@
 from argparse import ArgumentParser
 from glob import glob
-from itertools import chain
 from multivitamin.utils.parser import parse_graph
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 
 from trier.scoring import Symmetric, ComponentScorer
 from trier.aligning import GuidedAligning
+from trier.util.func import concat
 
 scorers = dict(map(lambda c: (c.__name__, c), [Symmetric, ComponentScorer]))
 
@@ -15,7 +15,7 @@ parser.add_argument('--scorer', '-s', choices=scorers.keys(),
                     default=Symmetric.__name__)
 args = parser.parse_args()
 
-inputs = chain.from_iterable(map(glob, args.inputs))
+inputs = concat(map(glob, args.inputs))
 graphs = map(parse_graph, inputs)
 scorer = scorers[args.scorer](list(graphs))
 scorer.calc_scoring()

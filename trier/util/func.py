@@ -1,3 +1,5 @@
+from itertools import chain
+
 
 def curry(f):
     """Turn a function that accepts a list of arguments to a function that
@@ -11,3 +13,7 @@ def uncurry(f):
     these arguments as list. Applies only to non-keyworded arguments."""
     def uncurried(arg, **kwargs): return f(*arg, **kwargs)
     return uncurried
+
+
+def concat(list_of_lists):
+    return list(chain.from_iterable(list_of_lists))

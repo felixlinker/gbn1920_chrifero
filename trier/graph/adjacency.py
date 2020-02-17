@@ -2,10 +2,10 @@ import numpy
 from multivitamin.basic.node import Node
 from multivitamin.basic.edge import Edge
 from multivitamin.basic.graph import Graph
-from itertools import chain
 from enum import Enum
 from scipy.sparse.csgraph import dijkstra
 
+from ..util.func import concat
 
 _map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
 
@@ -154,7 +154,7 @@ class AdjacencyGraph:
         # Split every subgraph into a set of strongly connected components
         splitted = [_split_reachability(sg, self) for sg in self.sub_graphs]
         # Merge the list of connected components
-        self.sub_graphs = list(chain.from_iterable(splitted))
+        self.sub_graphs = concat(splitted)
 
     def split_cycles(self):
         '''
@@ -297,7 +297,7 @@ class AdjacencyGraph:
             node.neighbours = set(map(lambda e: e.node2, edges))
 
         return Graph(id=self.id, nodes=set(node_2_edges.keys()),
-                     edges=set(chain.from_iterable(node_2_edges.values())),
+                     edges=set(concat(node_2_edges.values())),
                      nodes_labelled=True, edges_labelled=True,
                      is_directed=False)
 
