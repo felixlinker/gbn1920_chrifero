@@ -7,14 +7,14 @@ from enum import Enum
 from scipy.sparse.csgraph import dijkstra
 
 
-__map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
+_map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
 
 
-def __split_reachability(sub_graph, parent):
+def _split_reachability(sub_graph, parent):
     reachability_matrix = dijkstra(sub_graph.adj_matrix, directed=False)
     indexes = numpy.array(range(sub_graph.adj_matrix.shape[0]))
     reachables = map(lambda r: indexes * r,
-                     __map_is_reachable(reachability_matrix))
+                     _map_is_reachable(reachability_matrix))
     for i, reachables in enumerate(reachables):
         # Only consider every set of reachables once
         if reachables[0] <= i:
@@ -51,7 +51,7 @@ class AdjacencyGraph:
         self.sub_graphs = []
         self.leftover_graph = None
         if graph:
-            self.__from_multivitamin(graph)
+            self._from_multivitamin(graph)
         elif matrix and edge_labels and node_labels:
             self.id = gid
             self.adj_matrix = matrix
@@ -60,7 +60,7 @@ class AdjacencyGraph:
         else:
             raise ValueError('not enough arguments')
 
-    def __from_multivitamin(self, graph):
+    def _from_multivitamin(self, graph):
         # Nodes and edges actually are sets; convert them to list here such that
         # the order of iteration is fixed
         self.id = graph.id
@@ -141,9 +141,9 @@ class AdjacencyGraph:
                         end_of_path = True\
     '''
 
-    def __split_connected_subgraphs(self):
+    def _split_connected_subgraphs(self):
         # Split every subgraph into a set of strongly connected components
-        splitted = [__split_reachability(sg, self) for sg in self.sub_graphs]
+        splitted = [_split_reachability(sg, self) for sg in self.sub_graphs]
         # Merge the list of connected components
         self.sub_graphs = list(chain.from_iterable(splitted))
 
