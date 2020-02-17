@@ -169,22 +169,24 @@ class AdjacencyGraph:
                     for p in range(0, len(path_list)):
                         path = path_list[p]
                         neighbors = self.get_adjacent_nodes(self.adj_matrix, path[len(path)-1])
-                        # print(neighbors)
 
                         for node in neighbors:
                             if node not in path:
-                                next_path = path
+                                next_path = path.copy()
+                                #print('Next path: ' + str(next_path))
                                 next_path.append(node)
                                 path_list.append(next_path)
-                                # print(next_path)
-                            elif path[0] == node:
+                                #print(next_path)
+                            elif path[0] == node and len(path) >= 3:
                                 if self.is_new_cycle(path, cycles):
                                     print("Cycle found: " +str(path))
                                     cycles.append(path)
                             else:
                                 pass
+                            
     
                     path_list = path_list[path_index+1:]
+                    #print(path_list)
                     path_length += 1
                     # print(path_length)
 
