@@ -2,24 +2,34 @@ from Bio import Phylo
 from io import StringIO
 import re
 
+
 class GuidedAligning:
     def __init__(self, graph_list, guide_tree):
         self.graph_list = graph_list
         self.guide_tree = guide_tree
         pass
 
+
+
     def calc_aligning(self):
-        # convert tree into newick-format
-        handle = StringIO()
-        Phylo.write(self.guide_tree, handle, "newick")
-        gt_newickformat = handle.getvalue()
 
-        # clean up useless information in newick-format:
-        newick = (re.sub(":0.00000", "", gt_newickformat))
+        if self.guide_tree.is_bifurcating():
+            print('Alles gut')
+        else:
+            print('Nicht gut')
 
-        pairs = (re.findall(r"\([^,()]+\,[^,()]+\)", newick))
+        leafs = self.guide_tree.get_terminals()
+        root = self.guide_tree.clade
 
-        # interpret newickformat as alignment-guide
-        # for g in self.graph_list:
-        #     if g
+        # for t in root.clades:
+        #     if t in leafs:
+        #         print('Pair: ', self.guide_tree.clades)
+        #     else:
+        #         self.get_children(t)
+
+        for t in root.clades:
+            while t not in leafs:
+                t = t.clades
+            print('Pair: ', self.guide_tree.clades)
+
         pass

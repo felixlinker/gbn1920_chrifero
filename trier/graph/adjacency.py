@@ -64,7 +64,6 @@ class SubGraph:
 class AdjacencyGraph:
     def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
         self.sub_graphs = []
-        self.leftover_graph = None
         if graph:
             self._from_multivitamin(graph)
         elif matrix and edge_labels and node_labels:
@@ -102,12 +101,9 @@ class AdjacencyGraph:
             self.edge_labels[i] = v or self.edge_labels.T[i]
 
     def decompose(self):
-        dec_matrix = self.adj_matrix
         self.cut_tails()
         self._split_connected_subgraphs()
         self.split_cycles()
-        self.leftover_graph = SubGraph(parent=self, adj_matrix=self.adj_matrix, label =None)
-        self.adj_matrix = dec_matrix
         return self.sub_graphs
 
     def cut_tails(self):
