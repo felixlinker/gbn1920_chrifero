@@ -32,34 +32,56 @@ class SubGraphLabel(Enum):
 
 
 class SubGraph:
-    def __init__(self, parent, adj_matrix=None, label=None):
+    def __init__(self, parent, adj_matrix=None, label=None,atom_dict = None):
         self.parent = parent
         if adj_matrix is not None and adj_matrix.shape != parent.adj_matrix.shape:
             raise ValueError("adjacency matrices must agree on shape")
         self.adj_matrix = adj_matrix if adj_matrix is not None else numpy.zeros(
             parent.adj_matrix.shape)
         self.label = label
+        self.atom_dict = atom_dict
 
     def __len__(self):
         """Returns the number of all nodes in the subgraph."""
         # Get the number of rows that are connected to at least one node
         return len(list(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix))))
      
-    def get_chem_label(self):
+    def set_chem_label(self):
         '''Returns a classifier for structural type as str'''
+        self.atom_dict = {}
+        
         if self.label == SubGraphLabel.CYCLE:
             nodecount = 0
+            labels  = []
             for n in range(0, len(self.adj_matrix)):
                 if numpy.sum(self.adj_matrix[n], axis=0) >= 1:
                     nodecount += 1
-            return 'R' + str(nodecount)
+                    labels.append(self.parent.node_labels[n][0])
+            labels.sort()
+            for ch in labels:
+                if ch not in self.atom_dict.keys():
+                    self.atom_dict[ch] = labels.count(ch)
+            return self.atom_dict
         else:
             labels = []
             for i in range(0, len(self.adj_matrix)):
                 if numpy.sum(self.adj_matrix[i], axis=0) >= 1:
                     labels.append(self.parent.node_labels[i][0])
-            ret = ""
-            return ret.join(sorted(labels))
+            labels.sort()
+            for ch in labels:
+                if ch not in self.atom_dict.keys():
+                    self.atom_dict[ch] = labels.count(ch)
+            return self.atom_dict
+        
+    def chem_toString(self):
+        if self.label == SubGraphLabel.CYCLE:
+            ch_str = "R"
+        else:
+            ch_str = "T"
+        for key in sorted(self.atom_dict.keys()):
+            ch_str = ch_str + ''.join([str(key)*self.atom_dict.get(key)])
+            #ch_str = ch_str + str(key)
+        return ch_str
 
 class AdjacencyGraph:
     def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
