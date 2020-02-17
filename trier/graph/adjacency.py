@@ -39,7 +39,10 @@ class SubGraph:
         self.adj_matrix = adj_matrix if adj_matrix is not None else numpy.zeros(
             parent.adj_matrix.shape)
         self.label = label
-        self.atom_dict = atom_dict
+        if atom_dict is None and self.adj_matrix is not None:
+            self.atom_dict = self.get_chem_label()
+        elif self.adj_matrix is None: 
+            print("Warning: Subgraph with empty adjacency matrix.")
 
     def __len__(self):
         """Returns the number of all nodes in the subgraph."""
@@ -49,31 +52,19 @@ class SubGraph:
     def get_chem_label(self):
         '''Returns a classifier for structural type as str'''
         self.atom_dict = {}
+
+        labels  = []
+        for n in range(0, len(self.adj_matrix)):
+            if numpy.sum(self.adj_matrix[n], axis=0) >= 1:
+                labels.append(self.parent.node_labels[n][0])
+        labels.sort()
+        for ch in labels:
+            if ch not in self.atom_dict.keys():
+                self.atom_dict[ch] = labels.count(ch)
+        return self.atom_dict
+
         
-        if self.label == SubGraphLabel.CYCLE:
-            nodecount = 0
-            labels  = []
-            for n in range(0, len(self.adj_matrix)):
-                if numpy.sum(self.adj_matrix[n], axis=0) >= 1:
-                    nodecount += 1
-                    labels.append(self.parent.node_labels[n][0])
-            labels.sort()
-            for ch in labels:
-                if ch not in self.atom_dict.keys():
-                    self.atom_dict[ch] = labels.count(ch)
-            return self.atom_dict
-        else:
-            labels = []
-            for i in range(0, len(self.adj_matrix)):
-                if numpy.sum(self.adj_matrix[i], axis=0) >= 1:
-                    labels.append(self.parent.node_labels[i][0])
-            labels.sort()
-            for ch in labels:
-                if ch not in self.atom_dict.keys():
-                    self.atom_dict[ch] = labels.count(ch)
-            return self.atom_dict
-        
-    def chem_toString(self):
+    def __toString__(self):
         if self.label == SubGraphLabel.CYCLE:
             ch_str = "R"
         else:
@@ -112,7 +103,8 @@ class AdjacencyGraph:
         for edge in edges:
             i1 = node_indices[edge.node1]
             i2 = node_indices[edge.node2]
-            self.adj_matrix[i1][i2] = 1
+            self.adj_matrix[i1][i2] = 1        
+
             self.edge_labels[i1][i2] = edge.label
 
         # Make matrices symmetric; they might already be symmetric so check if
