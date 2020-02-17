@@ -124,23 +124,6 @@ class AdjacencyGraph:
     def get_tails(self):
         return filter(lambda sg: sg.label == SubGraphLabel.TAIL, self.sub_graphs)
 
-    '''
-    def tails_to_subgraph(self, del_adj_matrix):
-        
-        for n in range(0, len(del_adj_matrix[0])):
-            if numpy.sum(del_adj_matrix[n], axis=0) ==1:
-                path = []
-                path.append(n)
-                adj_pos = numpy.where(del_adj_matrix[n] == 1)[0]
-                end_of_path = False
-                while end_of_path is not True:
-                    if numpy.sum(del_adj_matrix[adj_pos[0]], axis=0) >=2:
-                        path.append(adj_pos[0])
-                        adj_pos = numpy.where(del_adj_matrix[adj_pos[0]] == 1)[0]
-                    else: 
-                        end_of_path = True\
-    '''
-
     def _split_connected_subgraphs(self):
         # Split every subgraph into a set of strongly connected components
         splitted = [_split_reachability(sg, self) for sg in self.sub_graphs]
