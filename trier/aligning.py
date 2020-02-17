@@ -35,8 +35,11 @@ class GuidedAligning:
         self.rec(self.alignment_pairs)
 
         # TODO Ausgabe der Alignment-Pairs lesbar machen
-        for p in self.alignment_pairs:
-            print('1.',p.get_terminals())
+        for p in range(0, len(self.alignment_pairs)):
+            # print(p+1, self.alignment_pairs[p].get_terminals())
+            print()
+            for t in range(0, len(self.alignment_pairs[p].get_terminals())):
+                print(self.alignment_pairs[p].get_terminals()[t].name, sep='_', end='_')
 
     def rec(self, list_of_pairs):
         self.parents = []
