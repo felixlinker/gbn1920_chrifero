@@ -44,7 +44,22 @@ class SubGraph:
         """Returns the number of all nodes in the subgraph."""
         # Get the number of rows that are connected to at least one node
         return len(list(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix))))
-
+     
+    def get_chem_label(self):
+        '''Returns a classifier for structural type as str'''
+        if self.label == SubGraphLabel.CYCLE:
+            nodecount = 0
+            for n in range(0, len(self.adj_matrix)):
+                if numpy.sum(self.adj_matrix[n], axis=0) >= 1:
+                    nodecount += 1
+            return 'R' + str(nodecount)
+        else:
+            labels = []
+            for i in range(0, len(self.adj_matrix)):
+                if numpy.sum(self.adj_matrix[i], axis=0) >= 1:
+                    labels.append(self.parent.node_labels[i][0])
+            ret = ""
+            return ret.join(sorted(labels))
 
 class AdjacencyGraph:
     def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
