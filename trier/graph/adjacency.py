@@ -300,3 +300,19 @@ class AdjacencyGraph:
     def __len__(self):
         """Returns the number of nodes in the graph."""
         return self.adj_matrix.shape[0]
+
+    def __repr__(self):
+        r = ""
+        r += f"#nodes;{self.adj_matrix.shape[0]}\n"
+        r += f"#edges;{numpy.count_nonzero(self.adj_matrix)}\n"
+        r += "Nodes labelled;True\n"
+        r += "Edges labelled;True\n"
+        r += "Directed graph;False\n"
+        r += "\n"
+        r += "\n".join([f"{i};{l}" for i, l in enumerate(self.node_labels)])
+        r += "\n"
+        r += "\n".join([f"{i};{j};{l}"
+                        for (i, j), l in numpy.ndenumerate(numpy.tril(self.edge_labels))
+                        if l])
+        r += "\n"
+        return r
