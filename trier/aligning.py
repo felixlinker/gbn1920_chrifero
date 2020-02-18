@@ -1,8 +1,3 @@
-from Bio import Phylo
-from io import StringIO
-import re
-import itertools
-
 
 class GuidedAligning:
     def __init__(self, graph_list, guide_tree):
