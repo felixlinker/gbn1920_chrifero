@@ -39,7 +39,7 @@ class GuidedAligning:
                     self.alignment_pairs.append(self.parents[p1])
 
                     #graphen bestimmen
-                    
+
 
                     # Aligniere Paar mit subVF2
                     instance = subVF2(self.parents[p1], self.parents[p2])
