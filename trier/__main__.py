@@ -16,8 +16,8 @@ parser.add_argument('--scorer', '-s', choices=scorers.keys(),
 args = parser.parse_args()
 
 inputs = concat(map(glob, args.inputs))
-graphs = map(parse_graph, inputs)
-scorer = scorers[args.scorer](list(graphs))
+graphs = list(map(parse_graph, inputs))
+scorer = scorers[args.scorer](graphs)
 scorer.calc_scoring()
 tree_constructor = DistanceTreeConstructor()
 tree = tree_constructor.upgma(scorer.get_scoring())

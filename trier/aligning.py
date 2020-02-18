@@ -17,7 +17,7 @@ class GuidedAligning:
         # Alle Eltern-Knoten, der Blaetter bestimmen
         for leaf in leafs:
             leaf_path = self.guide_tree.get_path(leaf)
-            parent = leaf_path[-2]
+            parent = leaf_path[-1]
             self.parents.append(parent)
 
         # Wenn zwei Eltern-Knoten uebereinstimmen, sollen ihr Kinder-Knoten aligniert werden.
@@ -49,6 +49,7 @@ class GuidedAligning:
             self.parents.append(parent)
 
         # wieder nach Ubereinstimmungen schauen, damit Kinder-Knoten in alignier-Liste aufgenommen werden
+        test_root = None
         for p1 in range(0, len(self.parents)-1):
             for p2 in range(p1+1, len(self.parents)):
                 if self.parents[p1] == self.parents[p2] and self.parents[p1] not in self.alignment_pairs:
