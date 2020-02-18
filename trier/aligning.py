@@ -13,7 +13,7 @@ class GuidedAligning:
             print('Nicht gut, Tree is not bifurcating')
 
         leafs = self.guide_tree.get_terminals()
-        print(self.guide_tree)
+        # print(self.guide_tree)
 
         # Alle Eltern-Knoten, der Blaetter bestimmen
         for leaf in leafs:
@@ -64,7 +64,6 @@ class GuidedAligning:
 
         test_root = self.guide_tree.clade
         # wieder nach Ubereinstimmungen schauen, damit Kinder-Knoten in alignier-Liste aufgenommen werden
-        test_root = None
         for p1 in range(0, len(self.parents)-1):
             for p2 in range(p1+1, len(self.parents)):
                 if self.parents[p1] == self.parents[p2] and self.parents[p1] not in self.alignment_pairs:
