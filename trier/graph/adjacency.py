@@ -41,14 +41,14 @@ class SubGraph:
         self.label = label
         if atom_dict is None and self.adj_matrix is not None:
             self.atom_dict = self.get_chem_label()
-        elif self.adj_matrix is None: 
+        elif self.adj_matrix is None:
             print("Warning: Subgraph with empty adjacency matrix.")
 
     def __len__(self):
         """Returns the number of all nodes in the subgraph."""
         # Get the number of rows that are connected to at least one node
         return len(list(filter(lambda s: 0 < s, map(numpy.sum, self.adj_matrix))))
-     
+
     def get_chem_label(self):
         '''Returns a classifier for structural type as str'''
         self.atom_dict = {}
@@ -103,7 +103,7 @@ class AdjacencyGraph:
         for edge in edges:
             i1 = node_indices[edge.node1]
             i2 = node_indices[edge.node2]
-            self.adj_matrix[i1][i2] = 1        
+            self.adj_matrix[i1][i2] = 1
 
             self.edge_labels[i1][i2] = edge.label
 
@@ -127,7 +127,7 @@ class AdjacencyGraph:
         dec_matrix = self.adj_matrix
         del_adj_matrix = numpy.zeros_like(self.adj_matrix)
         is_trimmed = self.has_not_deg_one(dec_matrix)
-        
+
         '''
         for i in range(0, len(self.adj_matrix)):
             node_index_dict[i] = i
@@ -188,12 +188,8 @@ class AdjacencyGraph:
                                 #print(next_path)
                             elif path[0] == node and len(path) >= 3:
                                 if self.is_new_cycle(path, cycles):
-                                    print("Cycle found: " +str(path))
                                     cycles.append(path)
-                            else:
-                                pass
-                            
-    
+
                     path_list = path_list[path_index+1:]
                     #print(path_list)
                     path_length += 1
