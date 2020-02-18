@@ -1,3 +1,7 @@
+from Bio import Phylo
+from io import StringIO
+from multivitamin.algorithms.vf2_subsub import subVF2
+
 
 class GuidedAligning:
     def __init__(self, graph_list, guide_tree):
@@ -5,6 +9,7 @@ class GuidedAligning:
         self.guide_tree = guide_tree
         self.alignment_pairs = []
         self.parents = []
+        self.results = {}
 
     def calc_aligning(self):
         if self.guide_tree.is_bifurcating():
@@ -32,6 +37,18 @@ class GuidedAligning:
             for p2 in range(p1+1, len(self.parents)):
                 if self.parents[p1] == self.parents[p2]:
                     self.alignment_pairs.append(self.parents[p1])
+
+                    #graphen bestimmen
+                    
+
+                    # Aligniere Paar mit subVF2
+                    instance = subVF2(self.parents[p1], self.parents[p2])
+                    instance.match()
+                    result_graph = instance.get_real_result_graph()
+
+                    # Speichere Result in dict
+                    self.results[self.parents[p1].name] = result_graph
+
         # Testen ob es einen noch nicht gematchten Leaf gibt, der muss auch in pairs
         for p1 in range(0, len(self.parents)):
             if self.parents[p1] not in self.alignment_pairs:
@@ -45,6 +62,14 @@ class GuidedAligning:
         for p in range(0, len(self.alignment_pairs)):
             # print(p+1, self.alignment_pairs[p].get_terminals())
             print()
+            # Aligniere Paar mit subVF2
+            # instance = subVF2(self.alignment_pairs[0], self.alignment_pairs[1])
+            # instance.match()
+            # result_graph = instance.get_real_result_graph()
+
+            # Speichere Result in dict
+            # self.results[self.alignment_pairs[p].get_terminals()[t].name] = result_graph
+
             for t in range(0, len(self.alignment_pairs[p].get_terminals())):
                 print(self.alignment_pairs[p].get_terminals()[t].name, sep='_', end='_')
 
