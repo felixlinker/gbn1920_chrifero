@@ -81,7 +81,7 @@ class AdjacencyGraph:
         self.sub_graphs = []
         if graph:
             self._from_multivitamin(graph)
-        elif matrix and edge_labels and node_labels:
+        elif matrix is not None and edge_labels is not None and node_labels is not None:
             self.id = gid
             self.adj_matrix = matrix
             self.edge_labels = edge_labels
