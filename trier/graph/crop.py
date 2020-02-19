@@ -20,7 +20,9 @@ def crop_graph(graph: AdjacencyGraph):
             adj = base + _map_transitive_closure(dijkstra(other.adj_matrix))
             reachable_closure = _map_transitive_closure(
                 dijkstra(adj, directed=False))
-            new_adj[i][i + 1 + j] = int(np.any(adj < reachable_closure))
+            is_adj = int(np.any(adj < reachable_closure))
+            new_adj[i][i + 1 + j] = is_adj
+            new_adj[i + 1 + j][i] = is_adj
     return AdjacencyGraph(gid=graph.id + '_reduced', matrix=new_adj,
                           edge_labels=np.full(new_adj.shape, ''),
                           node_labels=list(map(str, components)))
