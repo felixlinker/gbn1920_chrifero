@@ -9,6 +9,21 @@
             "mv_graph": "graphs/small_2.graph",
             "tails": 1,
             "cycles": 0
+        },
+        {
+            "mv_graph": "graphs/small_4.graph",
+            "tails": 1,
+            "cycles": 1
+        },
+        {
+            "mv_graph": "graphs/small_5.graph",
+            "tails": 0,
+            "cycles": 2
+        },
+        {
+            "mv_graph": "graphs/small_6.graph",
+            "tails": 0,
+            "cycles": 2
         }
     ]
 }
