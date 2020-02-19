@@ -13,9 +13,8 @@ _map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
 def _split_reachability(sub_graph, parent):
     reachability_matrix = dijkstra(sub_graph.adj_matrix, directed=False)
     indexes = numpy.array(range(sub_graph.adj_matrix.shape[0]))
-    reachables = map(lambda r: indexes * r,
-                     _map_is_reachable(reachability_matrix))
-    for i, reachables in enumerate(reachables):
+    for i, selector in enumerate(_map_is_reachable(reachability_matrix)):
+        reachables = indexes[selector]
         # Only consider every set of reachables once
         if reachables[0] < i:
             continue
