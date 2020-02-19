@@ -23,4 +23,4 @@ def crop_graph(graph: AdjacencyGraph):
             new_adj[i][i + 1 + j] = int(np.any(adj < reachable_closure))
     return AdjacencyGraph(gid=graph.id + '_reduced', matrix=new_adj,
                           edge_labels=np.full(new_adj.shape, ''),
-                          node_labels=list(map(SubGraph.chem_toString, components)))
+                          node_labels=list(map(str, components)))
