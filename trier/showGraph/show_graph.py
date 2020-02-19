@@ -36,7 +36,7 @@ def show_graph(g):
     
     #set graph parameters for layout, labels, coloring
     pos=nx.spring_layout(graph)
-    nx.draw(graph, pos, node_color= color_map, with_labels=False, node_size=800)
+    nx.draw(graph, pos, node_color= color_map, with_labels=False, node_size=200)
     nx.draw_networkx_labels(graph, pos, labels =node_labels, font_size=11)
     #nx.draw_networkx_edge_labels(graph, pos, labels =edge_label_list, font_size=10)
     plt.axis('equal')
