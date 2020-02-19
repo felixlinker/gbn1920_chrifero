@@ -10,6 +10,8 @@ class GuidedAligning:
         self.alignment_pairs = []
         self.parents = []
         self.results = {}
+        for graph in graph_list:
+            self.results[graph.id] = graph
 
     def calc_aligning(self):
         if self.guide_tree.is_bifurcating():
@@ -23,13 +25,11 @@ class GuidedAligning:
         # Alle Eltern-Knoten, der Blaetter bestimmen
         for leaf in leafs:
             leaf_path = self.guide_tree.get_path(leaf)
-
             # wenn Pfad die laenge 1 hat, ist die Wurzel der Parent-Knoten
             if len(leaf_path) == 1:
                 parent = self.guide_tree.clade
             else:
                 parent = leaf_path[-2]
-
             self.parents.append(parent)
 
         # Wenn zwei Eltern-Knoten uebereinstimmen, sollen ihr Kinder-Knoten aligniert werden.
@@ -37,41 +37,40 @@ class GuidedAligning:
             for p2 in range(p1+1, len(self.parents)):
                 if self.parents[p1] == self.parents[p2]:
                     self.alignment_pairs.append(self.parents[p1])
-
                     #graphen bestimmen
-
-
+                    g1 = graph[self.parents[p1].clades[0].name]
+                    g2 = graph[self.parents[p1].clades[1].name]
                     # Aligniere Paar mit subVF2
-                    instance = subVF2(self.parents[p1], self.parents[p2])
+                    instance = subVF2(g1, g2)
                     instance.match()
                     result_graph = instance.get_real_result_graph()
 
                     # Speichere Result in dict
-                    self.results[self.parents[p1].name] = result_graph
+                    self.results[self.parents[p1].name] = result_graph # oder g1.name+'_'+g2.name
 
         # Testen ob es einen noch nicht gematchten Leaf gibt, der muss auch in pairs
         for p1 in range(0, len(self.parents)):
             if self.parents[p1] not in self.alignment_pairs:
                 self.alignment_pairs.append(self.parents[p1])
-
-
         # Rekursiv schauen, welche Eltern-Knoten aligniert werden sollen
         self.rec(self.alignment_pairs)
 
-        # TODO Ausgabe der Alignment-Pairs lesbar machen
-        for p in range(0, len(self.alignment_pairs)):
-            # print(p+1, self.alignment_pairs[p].get_terminals())
-            print()
-            # Aligniere Paar mit subVF2
-            # instance = subVF2(self.alignment_pairs[0], self.alignment_pairs[1])
-            # instance.match()
-            # result_graph = instance.get_real_result_graph()
+        # # TODO Ausgabe der Alignment-Pairs lesbar machen
+        # for p in range(0, len(self.alignment_pairs)):
+        #     # print(p+1, self.alignment_pairs[p].get_terminals())
+        #     print()
+        #     # Aligniere Paar mit subVF2
+        #     # instance = subVF2(self.alignment_pairs[0], self.alignment_pairs[1])
+        #     # instance.match()
+        #     # result_graph = instance.get_real_result_graph()
+        #
+        #     # Speichere Result in dict
+        #     # self.results[self.alignment_pairs[p].get_terminals()[t].name] = result_graph
+        #
+        #     for t in range(0, len(self.alignment_pairs[p].get_terminals())):
+        #         print(self.alignment_pairs[p].get_terminals()[t].name, sep='_', end='_')
 
-            # Speichere Result in dict
-            # self.results[self.alignment_pairs[p].get_terminals()[t].name] = result_graph
-
-            for t in range(0, len(self.alignment_pairs[p].get_terminals())):
-                print(self.alignment_pairs[p].get_terminals()[t].name, sep='_', end='_')
+        return self.results
 
     def rec(self, list_of_pairs):
         self.parents = []
@@ -93,6 +92,7 @@ class GuidedAligning:
             for p2 in range(p1+1, len(self.parents)):
                 if self.parents[p1] == self.parents[p2] and self.parents[p1] not in self.alignment_pairs:
                     self.alignment_pairs.append(self.parents[p1])
+
                     # print('newpair', self.parents[p1].clades[0].clades, self.parents[p1].clades[1].clades)
                     test_root = self.parents[p1]
 
