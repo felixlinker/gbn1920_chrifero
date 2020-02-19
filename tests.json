@@ -1,0 +1,14 @@
+{
+    "graphs": [
+        {
+            "mv_graph": "graphs/small_1.graph",
+            "tails": 0,
+            "cycles": 1
+        },
+        {
+            "mv_graph": "graphs/small_2.graph",
+            "tails": 1,
+            "cycles": 0
+        }
+    ]
+}

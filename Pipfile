@@ -7,6 +7,7 @@ verify_ssl = true
 pylint = "*"
 autopep8 = "*"
 rope = "*"
+pytest = "*"
 
 [packages]
 multivitamin = {editable = true,path = "./../multivitamin"}
