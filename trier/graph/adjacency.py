@@ -18,6 +18,9 @@ def _split_reachability(sub_graph, parent):
         # Only consider every set of reachables once
         if reachables[0] < i:
             continue
+        # Ignore connected components of one node; these are isolated nodes
+        if len(reachables) <= 1:
+            continue
         new_matrix = numpy.zeros(sub_graph.adj_matrix.shape)
         for row in reachables:
             for col in reachables:
