@@ -8,6 +8,7 @@ from os import path
 from pathlib import Path
 
 from trier.scoring import Symmetric, ComponentScorer, CroppingScorer
+from trier.scoring.util import score_to_distance
 from trier.aligning import GuidedAligning
 from trier.util.func import concat
 
@@ -24,8 +25,9 @@ inputs = concat(map(glob, args.inputs))
 graphs = list(map(parse_graph, inputs))
 scorer = scorers[args.scorer](graphs)
 scorer.calc_scoring()
+distance = score_to_distance(scorer.get_scoring())
 tree_constructor = DistanceTreeConstructor()
-tree = tree_constructor.upgma(scorer.get_scoring())
+tree = tree_constructor.upgma(distance)
 aligner = GuidedAligning(graphs, tree)
 aligning = aligner.calc_aligning()
 print(aligning)
