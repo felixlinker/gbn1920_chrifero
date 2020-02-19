@@ -151,7 +151,8 @@ class AdjacencyGraph:
         return self.sub_graphs
 
     def get_tails(self):
-        return filter(lambda sg: sg.label == SubGraphLabel.TAIL, self.sub_graphs)
+        return list(
+            filter(lambda sg: sg.label == SubGraphLabel.TAIL, self.sub_graphs))
 
     def _split_connected_subgraphs(self):
         # Split every subgraph into a set of strongly connected components
@@ -209,13 +210,14 @@ class AdjacencyGraph:
             sub_matrix[path[len(path)-1]][path[0]] =1
             self.adj_matrix[path[0]][path[len(path)-1]] =0
             self.adj_matrix[path[len(path)-1]][path[0]] =0
-            
+
             self.sub_graphs.append(SubGraph(parent=self,adj_matrix=sub_matrix, label=SubGraphLabel.CYCLE))
 
         return self.sub_graphs
 
     def get_cycles(self):
-        return filter(lambda sg: sg.label == SubGraphLabel.CYCLE, self.sub_graphs)
+        return list(
+            filter(lambda sg: sg.label == SubGraphLabel.CYCLE, self.sub_graphs))
 
     def has_not_deg_one(self, matrix):
         for i in range(0, len(matrix[0])):
