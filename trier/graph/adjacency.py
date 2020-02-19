@@ -5,7 +5,7 @@ from multivitamin.basic.graph import Graph
 from enum import Enum
 from scipy.sparse.csgraph import dijkstra
 
-#from ..util.func import concat
+from ..util.func import concat
 
 _map_is_reachable = numpy.vectorize(lambda v: v < float('inf'))
 
@@ -116,7 +116,7 @@ class AdjacencyGraph:
 
     def decompose(self):
         self.cut_tails()
-        #self._split_connected_subgraphs()
+        self._split_connected_subgraphs()
         self.split_cycles()
         return self.sub_graphs
 
