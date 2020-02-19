@@ -144,7 +144,8 @@ class AdjacencyGraph:
                     #node_index_dict = self.update_node_dict(node_index_dict, node_index=i)
                     break
             is_trimmed = self.has_not_deg_one(self.adj_matrix)
-        self.sub_graphs.append(SubGraph(parent=self, adj_matrix=del_adj_matrix, label=SubGraphLabel.TAIL))
+        if len(numpy.nonzero(del_adj_matrix)[0]) > 0:
+            self.sub_graphs.append(SubGraph(parent=self, adj_matrix=del_adj_matrix, label=SubGraphLabel.TAIL))
         return self.sub_graphs
 
     def get_tails(self):
@@ -206,7 +207,7 @@ class AdjacencyGraph:
             sub_matrix[path[len(path)-1]][path[0]] =1
             self.adj_matrix[path[0]][path[len(path)-1]] =0
             self.adj_matrix[path[len(path)-1]][path[0]] =0
-
+            
             self.sub_graphs.append(SubGraph(parent=self,adj_matrix=sub_matrix, label=SubGraphLabel.CYCLE))
 
         return self.sub_graphs
