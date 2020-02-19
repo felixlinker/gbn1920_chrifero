@@ -13,10 +13,10 @@ _map_transitive_closure = np.vectorize(
 def crop_graph(graph: AdjacencyGraph):
     components = graph.get_tails() + graph.get_cycles()
     new_adj = np.zeros((len(components), len(components)))
-    for comp, i in enumerate(components):
+    for i, comp in enumerate(components):
         base = _map_transitive_closure(
             dijkstra(comp.adj_matrix + graph.adj_matrix, directed=False))
-        for other, j in enumerate(components[i + 1:]):
+        for j, other in enumerate(components[i + 1:]):
             adj = base + _map_transitive_closure(dijkstra(other.adj_matrix))
             reachable_closure = _map_transitive_closure(
                 dijkstra(adj, directed=False))
