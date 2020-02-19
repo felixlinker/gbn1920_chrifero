@@ -14,13 +14,13 @@ class GuidedAligning:
             self.results[graph.id] = graph
 
     def calc_aligning(self):
+        # print(self.guide_tree)
         if self.guide_tree.is_bifurcating():
             print('Baum. Gut.')
         else:
             print('Nicht gut, Tree is not bifurcating')
 
         leafs = self.guide_tree.get_terminals()
-        # print(self.guide_tree)
 
         # Alle Eltern-Knoten, der Blaetter bestimmen
         for leaf in leafs:
@@ -38,15 +38,15 @@ class GuidedAligning:
                 if self.parents[p1] == self.parents[p2]:
                     self.alignment_pairs.append(self.parents[p1])
                     #graphen bestimmen
-                    g1 = graph[self.parents[p1].clades[0].name]
-                    g2 = graph[self.parents[p1].clades[1].name]
+                    g1 = self.parents[p1].clades[0].name
+                    g2 = self.parents[p1].clades[1].name
+                    print(type(self.results))
                     # Aligniere Paar mit subVF2
-                    instance = subVF2(g1, g2)
+                    instance = subVF2(self.results[g1], self.results[g2])
                     instance.match()
                     result_graph = instance.get_real_result_graph()
-
                     # Speichere Result in dict
-                    self.results[self.parents[p1].name] = result_graph # oder g1.name+'_'+g2.name
+                    self.results[self.parents[p1].name] = result_graph
 
         # Testen ob es einen noch nicht gematchten Leaf gibt, der muss auch in pairs
         for p1 in range(0, len(self.parents)):
@@ -54,22 +54,6 @@ class GuidedAligning:
                 self.alignment_pairs.append(self.parents[p1])
         # Rekursiv schauen, welche Eltern-Knoten aligniert werden sollen
         self.rec(self.alignment_pairs)
-
-        # # TODO Ausgabe der Alignment-Pairs lesbar machen
-        # for p in range(0, len(self.alignment_pairs)):
-        #     # print(p+1, self.alignment_pairs[p].get_terminals())
-        #     print()
-        #     # Aligniere Paar mit subVF2
-        #     # instance = subVF2(self.alignment_pairs[0], self.alignment_pairs[1])
-        #     # instance.match()
-        #     # result_graph = instance.get_real_result_graph()
-        #
-        #     # Speichere Result in dict
-        #     # self.results[self.alignment_pairs[p].get_terminals()[t].name] = result_graph
-        #
-        #     for t in range(0, len(self.alignment_pairs[p].get_terminals())):
-        #         print(self.alignment_pairs[p].get_terminals()[t].name, sep='_', end='_')
-
         return self.results
 
     def rec(self, list_of_pairs):
