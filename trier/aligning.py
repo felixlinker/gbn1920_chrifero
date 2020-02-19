@@ -14,7 +14,7 @@ class GuidedAligning:
             self.results[graph.id] = graph
 
     def calc_aligning(self):
-        # print(self.guide_tree)
+        print(self.guide_tree)
         if self.guide_tree.is_bifurcating():
             print('Baum. Gut.')
         else:
@@ -62,10 +62,8 @@ class GuidedAligning:
         # wieder nach Eltern-Knoten schauen
         for p in list_of_pairs:
             leaf_path = self.guide_tree.get_path(p)
-            if len(leaf_path) == 1:
+            if len(leaf_path) <= 1:
                 parent = self.guide_tree.clade
-            elif len(leaf_path) == 0:
-                break
             else:
                 parent = leaf_path[-2]
             self.parents.append(parent)
@@ -74,10 +72,18 @@ class GuidedAligning:
         # wieder nach Ubereinstimmungen schauen, damit Kinder-Knoten in alignier-Liste aufgenommen werden
         for p1 in range(0, len(self.parents)-1):
             for p2 in range(p1+1, len(self.parents)):
-                if self.parents[p1] == self.parents[p2] and self.parents[p1] not in self.alignment_pairs:
+                if self.parents[p1] == self.parents[p2]:
                     self.alignment_pairs.append(self.parents[p1])
-
-                    # print('newpair', self.parents[p1].clades[0].clades, self.parents[p1].clades[1].clades)
+                    # graphen bestimmen
+                    g1 = self.parents[p1].clades[0].name
+                    g2 = self.parents[p1].clades[1].name
+                    print(type(self.results))
+                    # Aligniere Paar mit subVF2
+                    instance = subVF2(self.results[g1], self.results[g2])
+                    instance.match()
+                    result_graph = instance.get_real_result_graph()
+                    # Speichere Result in dict
+                    self.results[self.parents[p1].name] = result_graph
                     test_root = self.parents[p1]
 
         # wenn beide Eltern-Knoten die Wurzel des baums sind, ist Rekursion beendet
