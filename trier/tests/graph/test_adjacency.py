@@ -1,10 +1,5 @@
-from ...graph.adjacency import AdjacencyGraph
+from .util import set_up
 
-
-def set_up(graph):
-    g = AdjacencyGraph(graph=graph['mv_graph'])
-    g.decompose()
-    return g
 
 def test_tails_num(graph):
     g = set_up(graph)
