@@ -17,13 +17,13 @@ def _split_reachability(sub_graph, parent):
                      _map_is_reachable(reachability_matrix))
     for i, reachables in enumerate(reachables):
         # Only consider every set of reachables once
-        if reachables[0] <= i:
+        if reachables[0] < i:
             continue
         new_matrix = numpy.zeros(sub_graph.adj_matrix.shape)
         for row in reachables:
             for col in reachables:
                 new_matrix[row, col] = sub_graph.adj_matrix[row, col]
-                yield SubGraph(parent, label=sub_graph.label)
+        yield SubGraph(parent, adj_matrix=new_matrix, label=sub_graph.label)
 
 
 class SubGraphLabel(Enum):
