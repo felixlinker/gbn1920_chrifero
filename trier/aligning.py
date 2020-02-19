@@ -14,12 +14,6 @@ class GuidedAligning:
             self.results[graph.id] = graph
 
     def calc_aligning(self):
-        print(self.guide_tree)
-        if self.guide_tree.is_bifurcating():
-            print('Baum. Gut.')
-        else:
-            print('Nicht gut, Tree is not bifurcating')
-
         leafs = self.guide_tree.get_terminals()
 
         # Alle Eltern-Knoten, der Blaetter bestimmen
