@@ -6,7 +6,7 @@ from ..util.func import uncurry, concat
 
 
 def _subgraph_distance(sg1, sg2):
-    d = sg1.get_chem_label()
+    d = sg1.get_chem_label().copy()
     d.update([(k, abs(v - d.get(k, 0)))
               for k, v in sg2.get_chem_label().items()])
     vs = d.values()
