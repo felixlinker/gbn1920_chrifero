@@ -41,6 +41,13 @@
             "cycles": 2,
             "cropped_nodes": 2,
             "cropped_edges": 1
+        },
+        {
+            "mv_graph": "graphs/352/graph/11_CID_440599.graph",
+            "tails": 7,
+            "cycles": 1,
+            "cropped_nodes": 8,
+            "cropped_edges": 7
         }
     ]
 }
