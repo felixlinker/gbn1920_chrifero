@@ -35,7 +35,7 @@ class CroppingScorer(ComponentScorer):
 
     def calc_scoring(self):
         super().calc_scoring()
-        adj_graphs = map(lambda g: AdjacencyGraph(graph=g), self.graphs)
+        adj_graphs = [ AdjacencyGraph(graph=g) for g in self.graphs ]
         for g in adj_graphs:
             g.decompose()
         cropped = list(map(crop_graph, adj_graphs))
