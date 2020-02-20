@@ -19,8 +19,15 @@ def _subgraph_distance(sg1, sg2):
 
 def _scoring_matrix(graphs):
     matrix = {('-', '-'): -1}
+    considered = dict()
     sgs = concat([ g.sub_graphs for g in graphs ])
     for i, sg1 in enumerate(sgs):
+        # Do not consider sub-graphs of the same structure twice
+        if considered.get(str(sg1), False):
+            continue
+        considered[str(sg1)] = True
+
+        # For all remaining sub graphs, calculate the label distance
         for sg2 in sgs[i + 1:]:
             label_score = _subgraph_distance(sg1, sg2)
             matrix[(str(sg1), str(sg2))] = label_score
