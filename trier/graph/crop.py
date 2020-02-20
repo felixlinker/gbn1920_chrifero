@@ -25,4 +25,4 @@ def crop_graph(graph: AdjacencyGraph):
             new_adj[i + 1 + j][i] = is_adj
     return AdjacencyGraph(gid=graph.id + '_reduced', matrix=new_adj,
                           edge_labels=np.full(new_adj.shape, ''),
-                          node_labels=list(map(str, components)))
+                          node_labels=[[str(c)] for c in components])
