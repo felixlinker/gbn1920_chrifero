@@ -10,6 +10,9 @@ _map_transitive_closure = np.vectorize(
     lambda x: int(0 < x and x < float('inf')))
 
 
+_map_adj_str = np.vectorize(lambda x: '1' if x else '')
+
+
 def crop_graph(graph: AdjacencyGraph):
     components = graph.get_tails() + graph.get_cycles()
     new_adj = np.zeros((len(components), len(components)))
@@ -24,5 +27,5 @@ def crop_graph(graph: AdjacencyGraph):
             new_adj[i][i + 1 + j] = is_adj
             new_adj[i + 1 + j][i] = is_adj
     return AdjacencyGraph(gid=graph.id + '_reduced', matrix=new_adj,
-                          edge_labels=np.full(new_adj.shape, ''),
+                          edge_labels=_map_adj_str(new_adj),
                           node_labels=[[str(c)] for c in components])
