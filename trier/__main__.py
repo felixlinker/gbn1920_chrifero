@@ -32,8 +32,8 @@ tree = tree_constructor.upgma(distance)
 
 if args.outdir:
     Path(args.outdir).mkdir(parents=True, exist_ok=True)
-    with open(path.join(args.outdir, 'scoring.phylip'), 'w') as handle:
-        scorer.get_scoring().format_phylip(handle)
+    with open(path.join(args.outdir, 'distance.phylip'), 'w') as handle:
+        distance.format_phylip(handle)
     Phylo.write(tree, path.join(args.outdir, 'guide.newick'), 'newick')
 
 if not args.no_alignment:
