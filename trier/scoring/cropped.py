@@ -1,7 +1,10 @@
+import numpy as np
+
 from .components import ComponentScorer
 from .symmetric import Symmetric
 from ..graph.adjacency import AdjacencyGraph
 from ..graph.crop import crop_graph
+from .util import np_to_distance
 from ..util.func import uncurry, concat
 
 
@@ -42,8 +45,13 @@ class CroppingScorer(ComponentScorer):
         symmetric_cropped = Symmetric([ c.to_multivitamin() for c in cropped])
         symmetric_cropped.calc_scoring(scoring_matrix=_scoring_matrix(cropped))
         crop_weight, component_weight = self.crop_component_weight
-        self.matrix *= component_weight
-        self.matrix += crop_weight * symmetric_cropped.get_scoring()
+
+        # Cast scoring matrix from ComponentScorer to np array
+        np_matrix = np.array(list(self.matrix))
+        np_matrix *= component_weight
+        np_matrix += crop_weight * \
+            np.array(list(symmetric_cropped.get_scoring()))
+        self.matrix = np_to_distance(self.matrix.names, np_matrix)
 
     def get_scoring(self):
         return self.matrix
