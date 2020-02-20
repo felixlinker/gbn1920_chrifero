@@ -12,15 +12,37 @@ from trier.scoring.util import score_to_distance
 from trier.aligning import GuidedAligning
 from trier.util.func import concat
 
-scorers = dict(map(lambda c: (c.__name__, c), [Symmetric, ComponentScorer, CroppingScorer]))
+scorers = dict(map(lambda c: (c.__name__, c), [
+               Symmetric, ComponentScorer, CroppingScorer]))
 
-parser = ArgumentParser()
-parser.add_argument('--inputs', '-i', type=str, nargs='+', required=True)
+parser = ArgumentParser(
+    description="""trier is a library that comes with a command line interface.
+    You are executing the CLI right now.
+    In a nutshell, this CLI executes the following steps:
+    Read a list of graphs,
+    calculate the distance between the graphs,
+    construct a guide-tree for alignment,
+    calculate the alignment.
+    """)
+parser.add_argument('--inputs', '-i', type=str, nargs='+', required=True,
+                    help="""List of paths to .graph files. File names may
+                    contain wildcards, e.g. ./my-path/*.graph""")
 parser.add_argument('--scorer', '-s', choices=scorers.keys(),
-                    default=Symmetric.__name__)
-parser.add_argument('--outdir', '-o', type=str, required=False)
-parser.add_argument('--no-alignment', '-A', action='store_true')
-parser.add_argument('--tree', '-t', type=str, required=False, default=None)
+                    default=Symmetric.__name__,
+                    help="""Name of the scorer to calculate the scoring. """)
+parser.add_argument('--outdir', '-o', type=str, required=False,
+                    help="""Directory to write results to; if none is given,
+                    nothing will be written.""")
+parser.add_argument('--no-alignment', '-A', action='store_true',
+                    help="""If this flag is set, only the distance-matrix and
+                    the guide-tree will be calculated; the guide-tree will not
+                    be traversed.""")
+parser.add_argument('--tree', '-t', type=str, required=False, default=None,
+                    help="""Path to phylogenetic tree file. Leafs of the tree
+                    must be labelled with the corresponding graph files names
+                    without file extension. If this argument is given, the
+                    guide-tree calculation will be skipped and this tree is
+                    used instead.""")
 args = parser.parse_args()
 
 inputs = concat(map(glob, args.inputs))
