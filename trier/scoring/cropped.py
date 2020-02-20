@@ -1,5 +1,6 @@
 from .components import ComponentScorer
 from .symmetric import Symmetric
+from ..graph.adjacency import AdjacencyGraph
 from ..graph.crop import crop_graph
 from ..util.func import uncurry, concat
 
@@ -34,8 +35,11 @@ class CroppingScorer(ComponentScorer):
 
     def calc_scoring(self):
         super().calc_scoring()
-        cropped = list(map(crop_graph, self.graphs))
-        symmetric_cropped = Symmetric(cropped)
+        adj_graphs = map(lambda g: AdjacencyGraph(graph=g), self.graphs)
+        for g in adj_graphs:
+            g.decompose()
+        cropped = list(map(crop_graph, adj_graphs))
+        symmetric_cropped = Symmetric([ c.to_multivitamin() for c in cropped])
         symmetric_cropped.calc_scoring(scoring_matrix=_scoring_matrix(cropped))
         crop_weight, component_weight = self.crop_component_weight
         self.matrix *= component_weight
