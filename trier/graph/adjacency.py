@@ -77,8 +77,10 @@ class SubGraph:
         return ch_str
 
 class AdjacencyGraph:
-    def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None, node_labels=None):
+    def __init__(self, graph=None, gid=None, matrix=None, edge_labels=None,
+                 node_labels=None, max_cycle_len=7):
         self.sub_graphs = []
+        self.max_cycle_len = max_cycle_len
         if graph:
             self._from_multivitamin(graph)
         elif matrix is not None and edge_labels is not None and node_labels is not None:
@@ -177,7 +179,7 @@ class AdjacencyGraph:
                 new_path = []
                 new_path.append(i)
                 path_list.append(new_path)
-                while path_length <= 6:
+                while path_length <= self.max_cycle_len:
                     path_index = len(path_list)-1
                     for p in range(0, len(path_list)):
                         path = path_list[p]
