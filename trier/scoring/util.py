@@ -9,5 +9,5 @@ def score_to_distance(score_matrix):
     map_flip = np.vectorize(lambda v: v + max_score - 2 * v)
     flipped = map_flip(np_score)
     return DistanceMatrix(score_matrix.names,
-                          matrix=[list(map(int, sl[:i+1]))
+                          matrix=[list(map(float, sl[:i+1]))
                                   for i, sl in enumerate(flipped)])
