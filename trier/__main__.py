@@ -19,6 +19,7 @@ parser.add_argument('--inputs', '-i', type=str, nargs='+', required=True)
 parser.add_argument('--scorer', '-s', choices=scorers.keys(),
                     default=Symmetric.__name__)
 parser.add_argument('--outdir', '-o', type=str, required=False)
+parser.add_argument('--no-alignment', '-A', action='store_true')
 args = parser.parse_args()
 
 inputs = concat(map(glob, args.inputs))
@@ -28,14 +29,16 @@ scorer.calc_scoring()
 distance = score_to_distance(scorer.get_scoring())
 tree_constructor = DistanceTreeConstructor()
 tree = tree_constructor.upgma(distance)
-aligner = GuidedAligning(graphs, tree)
-aligning = aligner.calc_aligning()
-print(aligning)
 
 if args.outdir:
     Path(args.outdir).mkdir(parents=True, exist_ok=True)
     with open(path.join(args.outdir, 'scoring.phylip'), 'w') as handle:
         scorer.get_scoring().format_phylip(handle)
     Phylo.write(tree, path.join(args.outdir, 'guide.newick'), 'newick')
-    for k, g in aligning.items():
-        write_graph(g, args.outdir, k)
+
+if not args.no_alignment:
+    aligner = GuidedAligning(graphs, tree)
+    aligning = aligner.calc_aligning()
+    if args.outdir:
+        for k, g in aligning.items():
+            write_graph(g, args.outdir, k)
