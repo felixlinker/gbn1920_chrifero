@@ -1,7 +1,7 @@
 from .components import ComponentScorer
 from .symmetric import Symmetric
 from ..graph.crop import crop_graph
-from ..util.func import uncurry
+from ..util.func import uncurry, concat
 
 
 def _subgraph_distance(sg1, sg2):
@@ -15,11 +15,12 @@ def _subgraph_distance(sg1, sg2):
 
 def _scoring_matrix(graphs):
     matrix = {('-', '-'): -1}
-    for g1, i in enumerate(graphs):
-        for g2 in enumerate(graphs[i + 1:]):
-            label_score = _subgraph_distance(g1, g2)
-            matrix[(str(g1), str(g2))] = label_score
-            matrix[(str(g2), str(g1))] = label_score
+    sgs = concat([ g.sub_graphs for g in graphs ])
+    for i, sg1 in enumerate(sgs):
+        for sg2 in sgs[i + 1:]:
+            label_score = _subgraph_distance(sg1, sg2)
+            matrix[(str(sg1), str(sg2))] = label_score
+            matrix[(str(sg2), str(sg1))] = label_score
     return matrix
 
 
