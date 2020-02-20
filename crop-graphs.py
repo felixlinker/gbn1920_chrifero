@@ -15,6 +15,7 @@ args = parser.parse_args()
 graphs = map(parse_graph, concat(map(glob, args.inputs)))
 for g in graphs:
     adj = AdjacencyGraph(graph=g)
+    adj.decompose()
     cropped = crop_graph(adj)
     Path(args.outdir).mkdir(parents=True, exist_ok=True)
     write_graph(cropped.to_multivitamin(), args.outdir, f'{cropped.id}.graph')
