@@ -48,9 +48,11 @@ class CroppingScorer(ComponentScorer):
         adj_graphs = [ AdjacencyGraph(graph=g) for g in self.graphs ]
         for g in adj_graphs:
             g.decompose()
+        sub_graph_label_scores = _scoring_matrix(adj_graphs)
+
         cropped = list(map(crop_graph, adj_graphs))
         symmetric_cropped = Symmetric([ c.to_multivitamin() for c in cropped])
-        symmetric_cropped.calc_scoring(scoring_matrix=_scoring_matrix(cropped))
+        symmetric_cropped.calc_scoring(scoring_matrix=sub_graph_label_scores)
         crop_weight, component_weight = self.crop_component_weight
 
         # Cast scoring matrix from ComponentScorer to np array
