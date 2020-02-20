@@ -41,4 +41,4 @@ if not args.no_alignment:
     aligning = aligner.calc_aligning()
     if args.outdir:
         for k, g in aligning.items():
-            write_graph(g, args.outdir, k)
+            write_graph(g, args.outdir, k + '.graph')
